@@ -29,8 +29,10 @@ Move the borrowed repositories out to let intellisense help me out.
 
 ```
 # This might fail, just do this manually
-mv VerifAI/src/verifai/ ./
-mv carla/PythonAPI/carla/ ./
+mv VerifAI/ VerifAI-git
+mv VerifAI-git/src/verifai/ ./
+mv carla/ carla-git
+mv carla-git/PythonAPI/carla/ ./
 # Had to alter some imports for these
 mv ros-bridge/carla_ad_agent/src/carla_ad_agent/ ./
 ```
