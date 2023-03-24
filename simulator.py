@@ -1,7 +1,3 @@
-# import sys
-# sys.path.append('/home/e5_5044/Desktop/carla/PythonAPI/carla/dist/carla-0.9.11-py3.7-linux-x86_64.egg')
-# sys.path.append('/home/e5_5044/Desktop/VerifAI/src/verifai/simulators/carla/agents/')
-# sys.path.append('/home/e5_5044/Desktop/carla/PythonAPI/carla/')
 from verifai.simulators.carla.client_carla import *
 from verifai.simulators.carla.carla_world import *
 from verifai.simulators.carla.carla_task import *
