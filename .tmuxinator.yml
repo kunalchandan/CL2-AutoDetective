@@ -1,0 +1,18 @@
+name: detective
+root: ~/
+
+windows:
+  - logs:
+      layout: tiled
+      panes:
+        - carla:
+          - cd Desktop/carla
+          - ./CarlaUE4.sh -opengl
+        - GPU:
+          - watch nvidia-smi
+        - falsifier:
+          - cd ~/Desktop/k_explorer
+          - poetry run python falsifier.py
+        - simulator:
+          - cd ~/Desktop/k_explorer
+          - poetry run python simulator.py
