@@ -34,7 +34,7 @@ import yaml
 import cv2
 import torch
 import torch.backends.cudnn as cudnn
-sys.path.append(str(pathlib.Path.absolute(pathlib.Path('yolov5'))))
+sys.path.append(str(pathlib.Path.absolute(pathlib.Path(pathlib.Path(__file__).parent.resolve(), 'yolov5'))))
 from yolov5.models.common import DetectMultiBackend
 from yolov5.utils.dataloaders import IMG_FORMATS, VID_FORMATS, LoadImages
 from yolov5.utils.general import (LOGGER, check_img_size, cv2,
