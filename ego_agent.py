@@ -15,13 +15,15 @@ from verifai.simulators.carla.agents.pid_follow_controller import *
 
 # System Imports
 import sys
+import pathlib
+
 import time
-import random
 from datetime import datetime
 
 # Math Imports
 import math
 import numpy as np
+import random
 
 # Data Imports
 from enum import IntEnum
@@ -32,7 +34,7 @@ import yaml
 import cv2
 import torch
 import torch.backends.cudnn as cudnn
-# sys.path.append('/home/e5_5044/Desktop/yolov5')
+sys.path.append(str(pathlib.Path.absolute(pathlib.Path('yolov5'))))
 from yolov5.models.common import DetectMultiBackend
 from yolov5.utils.dataloaders import IMG_FORMATS, VID_FORMATS, LoadImages
 from yolov5.utils.general import (LOGGER, check_img_size, cv2,
