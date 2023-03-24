@@ -3,10 +3,10 @@ import carla
 from agents.navigation.controller import VehiclePIDController
 
 # From ROS-Bridge
-from carla_ad_agent.agent import *
-# from agents.navigation.agent import *
-from carla_ad_agent.misc import distance_vehicle, draw_waypoints
-# from agents.tools.misc import distance_vehicle, draw_waypoints
+# from carla_ad_agent.agent import *
+from agents.navigation.agent import *
+# from carla_ad_agent.misc import distance_vehicle, draw_waypoints
+from agents.tools.misc import distance_vehicle, draw_waypoints
 
 from verifai.simulators.carla.agents.pid_agent import * 
 # from pid_agent import *

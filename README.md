@@ -33,6 +33,7 @@ mv VerifAI/ VerifAI-git
 mv VerifAI-git/src/verifai/ ./
 mv carla/ carla-git
 mv carla-git/PythonAPI/carla/ ./
+cp -r carla/agents/ ./
 # Had to alter some imports for these
 mv ros-bridge/carla_ad_agent/src/carla_ad_agent/ ./
 ```
