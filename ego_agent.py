@@ -37,8 +37,7 @@ import torch.backends.cudnn as cudnn
 sys.path.append(str(pathlib.Path.absolute(pathlib.Path(pathlib.Path(__file__).parent.resolve(), 'yolov5'))))
 from yolov5.models.common import DetectMultiBackend
 from yolov5.utils.dataloaders import IMG_FORMATS, VID_FORMATS, LoadImages
-from yolov5.utils.general import (LOGGER, check_img_size, cv2,
-                           non_max_suppression,scale_coords, strip_optimizer, xyxy2xywh)
+from yolov5.utils.general import (LOGGER, check_img_size, non_max_suppression, scale_boxes, strip_optimizer, xyxy2xywh)
 from yolov5.utils.torch_utils import select_device
 from yolov5.utils.augmentations import letterbox
 
@@ -394,7 +393,7 @@ class EgoAgent(PIDAgent):
         for i, det in enumerate(pred):
             if len(det):
                 # Rescale boxes from img_size to im0 size
-                det[:, :4] = scale_coords(image1.shape[2:], det[:, :4], image.shape).round()
+                det[:, :4] = scale_boxes(image1.shape[2:], det[:, :4], image.shape).round()
         pred = pred[0].tolist()
         # print(pred)
         return pred
