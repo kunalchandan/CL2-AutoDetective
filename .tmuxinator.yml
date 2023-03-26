@@ -12,9 +12,7 @@ windows:
           - watch nvidia-smi
         - falsifier:
           - cd ~/Desktop/k_explorer
-          - poetry shell
-          - python falsifier.py
+          - poetry run /usr/bin/python3 falsifier.py
         - simulator:
           - cd ~/Desktop/k_explorer
-          - poetry shell
-          - python simulator.py
+          - poetry run /usr/bin/python3 simulator.py
