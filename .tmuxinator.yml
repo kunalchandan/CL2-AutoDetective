@@ -11,10 +11,10 @@ windows:
         - GPU:
           - watch nvidia-smi
         - falsifier:
-          - cd ~/autoDetective
+          - cd ~/Desktop/k_explorer/
           - source venv/bin/activate
           - python falsifier.py
         - simulator:
-          - cd ~/autoDetective
+          - cd ~/Desktop/k_explorer/
           - source venv/bin/activate
           - python simulator.py
