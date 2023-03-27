@@ -1,0 +1,15 @@
+train: /home/e5_5044/Desktop/yolov5/data/images/train
+val: /home/e5_5044/Desktop/yolov5/data/images/val
+test: /home/e5_5044/Desktop/yolov5/data/images/test
+
+#number of classes
+nc: 5
+
+#class names
+names: ["bicycle","motorcycle","passenger_car","truck","walker"]
+
+
+
+
+
+
