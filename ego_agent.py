@@ -1,18 +1,3 @@
-# Drive Imports
-import carla
-from agents.navigation.controller import VehiclePIDController
-
-# From ROS-Bridge
-# from carla_ad_agent.agent import *
-from agents.navigation.agent import *
-# from carla_ad_agent.misc import distance_vehicle, draw_waypoints
-from agents.tools.misc import distance_vehicle, draw_waypoints
-
-from verifai.simulators.carla.agents.pid_agent import * 
-# from pid_agent import *
-from verifai.simulators.carla.agents.pid_follow_controller import * 
-# from pid_follow_controller import *
-
 # System Imports
 import sys
 import pathlib
@@ -29,6 +14,29 @@ import random
 from enum import IntEnum
 import pandas as pd
 
+
+from typing import List, Tuple, Dict
+
+# Drive Imports
+import carla
+
+sys.path.append(str(pathlib.Path.absolute(pathlib.Path(pathlib.Path(__file__).parent.resolve(), 'carla', 'PythonAPI', 'carla', 'agents'))))
+sys.path.append(str(pathlib.Path.absolute(pathlib.Path(pathlib.Path(__file__).parent.resolve(), 'carla', 'PythonAPI', 'carla'))))
+from agents.navigation.controller import VehiclePIDController
+
+# From ROS-Bridge
+# from carla_ad_agent.agent import *
+from agents.navigation.agent import *
+# from carla_ad_agent.misc import distance_vehicle, draw_waypoints
+from agents.tools.misc import distance_vehicle, draw_waypoints
+
+sys.path.append(str(pathlib.Path.absolute(pathlib.Path(pathlib.Path(__file__).parent.resolve(), 'VerifAI', 'src'))))
+from verifai.simulators.carla.agents.pid_agent import * 
+# from pid_agent import *
+from verifai.simulators.carla.agents.pid_follow_controller import * 
+# from pid_follow_controller import *
+
+
 # Imports related to Object Detection Model
 import yaml
 import cv2
@@ -37,7 +45,14 @@ import torch.backends.cudnn as cudnn
 sys.path.append(str(pathlib.Path.absolute(pathlib.Path(pathlib.Path(__file__).parent.resolve(), 'yolov5'))))
 from yolov5.models.common import DetectMultiBackend
 from yolov5.utils.dataloaders import IMG_FORMATS, VID_FORMATS, LoadImages
-from yolov5.utils.general import (LOGGER, check_img_size, non_max_suppression, scale_boxes, strip_optimizer, xyxy2xywh)
+from yolov5.utils.general import (
+    LOGGER,
+    check_img_size,
+    non_max_suppression,
+    scale_boxes,
+    strip_optimizer,
+    xyxy2xywh
+    )
 from yolov5.utils.torch_utils import select_device
 from yolov5.utils.augmentations import letterbox
 
@@ -46,22 +61,22 @@ LOCAL_PATH = pathlib.Path.absolute(pathlib.Path(__file__).parent.resolve())
 
 
 class LaneChange(IntEnum):
+    '''Enum for lane change'''
     LEFT = 1
     RIGHT = -1
 
 
-'''This is a Test Agent'''
 class EgoAgent(PIDAgent):
-    def __init__(self, vehicle, opt_dict=None):
+    '''Basic Agent stolen from Rishi'''
+    def __init__(self, vehicle, opt_dict:Dict=None):
         super().__init__(vehicle, opt_dict)
-        self.row_values = [] #list for maintaining data related to actions taken by ego
+        self.row_values : List[str] = [] # list for maintaining data related to actions taken by ego
         # Distance to maintain from other vehicles.
-        self.clear_dist = 10.0
-        self.current_image = None
-        self.location_pid_dict = {
+        self.clear_dist : float = 10.0
+        self.location_pid_dict : Dict[str, float] = {
             'K_P': 1.0,
             'K_D': 0.05,
-            'K_I': 1,
+            'K_I': 1.0,
             'dt': 0.05
         }
         if opt_dict:
@@ -81,20 +96,19 @@ class EgoAgent(PIDAgent):
         # desired lane. Negative/positive means to the left/right
         # of desired lane, respectively.
         self.lane_state = 0
-        self.is_changing_lane = False
+        self.is_changing_lane : bool = False
         self.current_image = None
 
         self.actor = self._world.get_actor(vehicle.id)
         print(self.actor)
         #Add rgb and depth sensors to the Ego here
         #Adding RGB and Depth Camera on Ego
-        # self.image_size = 1080
-        self.image_sizex = 1280
-        self.image_sizey = 1280
+        self.image_sizex : int = 1280
+        self.image_sizey : int = 1280
         self.fov = None
         cam_bp = self._world.get_blueprint_library().find('sensor.camera.rgb')
-        cam_bp.set_attribute("image_size_x",str(self.image_sizex))
-        cam_bp.set_attribute("image_size_y",str(self.image_sizey))
+        cam_bp.set_attribute("image_size_x", str(self.image_sizex))
+        cam_bp.set_attribute("image_size_y", str(self.image_sizey))
         cam_bp.set_attribute("fov",str(110))
         cam_bp.set_attribute('sensor_tick', '0.2')
         cam_location = carla.Location(2,0,1)
@@ -103,8 +117,8 @@ class EgoAgent(PIDAgent):
         self.rgb_camera = self._world.try_spawn_actor(cam_bp,cam_transform,self.actor,carla.AttachmentType.Rigid)
         
         depth_sensor_bp = self._world.get_blueprint_library().find('sensor.camera.depth')
-        depth_sensor_bp.set_attribute("image_size_x",str(self.image_sizex))
-        depth_sensor_bp.set_attribute("image_size_y",str(self.image_sizey))
+        depth_sensor_bp.set_attribute("image_size_x", str(self.image_sizex))
+        depth_sensor_bp.set_attribute("image_size_y", str(self.image_sizey))
         depth_sensor_bp.set_attribute("fov",str(110))
         depth_sensor_bp.set_attribute('sensor_tick', '0.2')
         depth_location = carla.Location(2,0,1)
@@ -115,7 +129,7 @@ class EgoAgent(PIDAgent):
         self.rgb_image = None
         self.depth_image = None
 
-        #Model parameters
+        # Model parameters
         self.imgsz=(640, 640)
         self.weights = pathlib.Path(LOCAL_PATH, 'OD_model_data', 'yolo_weights.pt')
         data = pathlib.Path(LOCAL_PATH, 'OD_model_data', 'carla_data.yaml')
@@ -128,26 +142,28 @@ class EgoAgent(PIDAgent):
         self.agnostic_nms=False  # class-agnostic NMS
         self.device1 = select_device(self.device)
         
-        #Load model for object detection
+        # Load model for object detection
         self.od_model = DetectMultiBackend(self.weights, dnn=dnn, device=self.device1, data=data, fp16=half)
         self.stride, self.names, self.pt = self.od_model.stride, self.od_model.names, self.od_model.pt
         self.imgsz = check_img_size(self.imgsz, s=self.stride)  # check image size
         self.classes = self.od_model.names
         #print("Model loaded")
-        self.rgb_camera.listen(lambda image: self.process_rgb_sensor_data(image))
-        self.depth_sensor.listen(lambda image: self.process_depth_sensor_data(image))
+        self.rgb_camera.listen(self.process_rgb_sensor_data)
+        self.depth_sensor.listen(self.process_depth_sensor_data)
         #print("Sensors listening")
-      
-    
+
     def get_lane_change_w(self, cur_w, lane_change):
-        # Return waypoint corresponding to LANE_CHANGE (either LEFT or RIGHT)
-        # from waypoint CUR_W. If lane change illegal or unsafe, returns None.
+        """
+        Return waypoint corresponding to LANE_CHANGE (either LEFT or RIGHT)
+        from waypoint CUR_W. If lane change illegal or unsafe, returns None.
+        """
         # print('enter get_lane_change_w')
         next_w = None
-        lane_safe = lambda w: self.lane_clear(w.transform.location)[0] and \
-            self.lane_clear(w.transform.location,
-                            min_dist=10*self.clear_dist,
-                            forward=w.transform.get_forward_vector())[0]
+        def lane_safe(w):
+            return self.lane_clear(w.transform.location)[0] and \
+                    self.lane_clear(w.transform.location,
+                                    min_dist=10*self.clear_dist,
+                                    forward=w.transform.get_forward_vector())[0]
         # Valur for curw is Waypoint(Transform(Location(x, y, z), Rotation(pitch = 0, yaw, roll)))
         # sprint("curw_w.lane_change value is: {}, carla.lanechange.left is {}".format(cur_w.lane_change, carla.LaneChange.Left))
         # print("***************************************************************************")
@@ -344,9 +360,10 @@ class EgoAgent(PIDAgent):
                 # print("Entering the code for changing lane")
                 self.change_lane()
                     
-            return self.controller.run_step(speed,
-                                            self.waypoints[0], self.row_values,
-                                            blocker.get_location(), self.calc_dist) # goes to pid_follow_controller.py line 52
+            # return self.controller.run_step(speed,
+            #                                 self.waypoints[0], self.row_values,
+            #                                 blocker.get_location(), self.calc_dist) # goes to pid_follow_controller.py line 52
+            return self.controller.run_step(speed, self.waypoints[0], self.row_values)
         else:
             self.row_values.append("Clear")
             # print("Entered the code where is_clear is true")

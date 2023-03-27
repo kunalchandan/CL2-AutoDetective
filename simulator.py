@@ -1,9 +1,19 @@
+# Environment imports
 import sys
-import pathlib
+from pathlib import Path
 
-sys.path.append(str(pathlib.Path.absolute(pathlib.Path(pathlib.Path(__file__).parent.resolve(), 'verifai', 'simulators', 'carla', 'agents'))))
+# Math imports
+import math
+import numpy as np
 
-from verifai.simulators.carla.client_carla import *
+# Carla
+from dotmap import DotMap
+
+ROOT = Path(Path(__file__).parent.resolve())
+sys.path.append(str(ROOT, 'VerifAI', 'src'))
+sys.path.append(str(ROOT, 'VerifAI', 'src', 'verifai', 'simulators', 'carla', 'agents'))
+sys.path.append(str(ROOT, 'carla', 'PythonAPI', 'carla'))
+from verifai.simulators.carla.client_carla import ClientCarla
 from verifai.simulators.carla.carla_world import *
 from verifai.simulators.carla.carla_task import *
 from verifai.simulators.carla.carla_scenic_task import *
@@ -12,16 +22,14 @@ from verifai.simulators.carla.agents.brake_agent import *
 from verifai.simulators.carla.agents.pid_agent import *
 from verifai.simulators.carla.agents.overtake_agent import *
 
+import carla
+
 from ego_agent import EgoAgent
 
-import numpy as np
-from dotmap import DotMap
-
-import math
-import carla
-from carla import Transform, Rotation, Location
+from carla import Transform, Rotation, Location # pylint: disable=no-name-in-module
 
 AGENTS = {'BrakeAgent': BrakeAgent, 'PIDAgent': PIDAgent, 'EgoAgent': EgoAgent}
+WORLD_MAP = 'Town04'
 
 # Falsifier (not CARLA) params
 PORT = 8888
@@ -31,14 +39,16 @@ simulation_data = DotMap()
 simulation_data.port = PORT
 simulation_data.bufsize = BUFSIZE
 
+
 class CustomCarlaTask(carla_task):
+    """Custom Carla Task"""
     def __init__(self,
                  n_sim_steps=250,
                  display_dim=(1280,720),
                  carla_host='127.0.0.1',
                  carla_port=2000,
                  carla_timeout=4.0,
-                 world_map='Town04'):
+                 world_map='Town04'): # pylint: disable=too-many-arguments
         super().__init__(
             n_sim_steps=n_sim_steps,
             display_dim=display_dim,
@@ -55,13 +65,14 @@ class CustomCarlaTask(carla_task):
         waypoint = self.world.world.get_map().get_waypoint(location)
         location.z = waypoint.transform.location.z + 1
         return location
+
     def use_sample(self, sample):
         self.objects = sample.objects
         for obj in sample.objects:
             spawn = Transform(self.snap_to_ground(Location(x=obj.position[0],
                                                            y=-obj.position[1], z=1)),
                               Rotation(yaw=-obj.heading * 180 / math.pi - 90))
-            attrs = dict()
+            attrs = {}
             if 'color' in obj._fields:
                 color = str(int(obj.color.r * 255)) + ',' \
                     + str(int(obj.color.g * 255)) + ',' + str(int(obj.color.b * 255))
@@ -86,8 +97,7 @@ class CustomCarlaTask(carla_task):
                                        has_lane_sensor=False,
                                        ego=obj is sample.objects[0],
                                        **attrs)
-                
-            
+
             elif obj.type == 'Pedestrian':
                 self.world.add_pedestrian(spawn=spawn, **attrs)
             elif obj.type in ['Prop', 'Trash', 'Cone']:
@@ -99,7 +109,7 @@ class CustomCarlaTask(carla_task):
     def trajectory_definition(self):
         # Get speed of collision as proportion of target speed.
         collision = [(c[0], c[1]) for c in self.ego_vehicle.collision_sensor.get_collision_speeds()]
-        
+
         # MTL doesn't like empty lists.
         if not collision:
             collision = [(0,0)]
@@ -110,14 +120,24 @@ class CustomCarlaTask(carla_task):
         return traj
 
 
-# Note: The world_map param below should correspond to the MapPath 
-# specified in the scenic file. E.g., if world_map is 'Town01',
-# the MapPath in the scenic file should be the path to Town01.xodr.
-WORLD_MAP = 'Town04'
-simulation_data.task = CustomCarlaTask(world_map=WORLD_MAP)
+def main():
+    """Main simulator function"""
+    # Note: The world_map param below should correspond to the MapPath
+    # specified in the scenic file. E.g., if world_map is 'Town01',
+    # the MapPath in the scenic file should be the path to Town01.xodr.
+    simulation_data.task = CustomCarlaTask(world_map=WORLD_MAP)
 
-print(f"Simulation Task Defined as : {WORLD_MAP}")
-client_task = ClientCarla(simulation_data)
-while client_task.run_client():
-    pass
-print('End of all simulations.')
+    print(f"Simulation Task Defined as : {WORLD_MAP}")
+    client_task = ClientCarla(simulation_data)
+    while True:
+        try:
+            while client_task.run_client():
+                pass
+        except RuntimeError:
+            print("Falsifier server does not seem to be running. Trying again in 2 seconds")
+            time.sleep(2.0)
+    print('End of all simulations.')
+
+
+if __name__ == "__main__":
+    main()

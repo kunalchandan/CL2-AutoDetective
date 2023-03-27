@@ -63,3 +63,13 @@ metric-temporal-logic 0.4.1 requires attrs<23,>=22
 Dowloading the Carla zip is too big, I only have a few GB to play with on this computer. 
 I will reuse the carla dowload in the `e5_5044` user's desktop.
 
+## Optional
+
+```
+pip install pylint[spelling]
+pip install bandit
+```
+
+```
+pylint --rcfile .pylintrc simulator.py
+```
