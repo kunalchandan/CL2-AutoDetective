@@ -5,3 +5,4 @@ yolov5/
 Scenic/
 __pycache__/
 venv/
+tmp/
