@@ -4,10 +4,10 @@ AV Stack consists of the following stages:
 
 1. Sensing
 2. Perception
-3. Planning 
+3. Planning
 4. Actuation
 
-In simulations we have ground truth, however irl we do not. 
+In simulations we have ground truth, however irl we do not.
 
 Are there some metrics we can use as a proxy to lay blame on the portion of the stack responsible?
 
@@ -31,22 +31,22 @@ git clone https://github.com/ultralytics/yolov5.git
 
 git clone https://github.com/BerkeleyLearnVerify/Scenic.git
 ```
-Move the borrowed repositories out to let intellisense help me out.
-
-```
-# This might fail, just do this manually
-mv VerifAI/ VerifAI-git
-mv VerifAI-git/src/verifai/ ./
-mv CarlaGit/PythonAPI/carla/ ./
-cp -r carla/agents/ ./
-cp -r Scenic/src/scenic/ ./
-# Had to alter some imports for these
-mv ros-bridge/carla_ad_agent/src/carla_ad_agent/ ./
-```
 
 Build environment.
+See (ENVIRONMENT.md document on how to setup the environment)[./ENVIRONMENT.md]
+
+Carla setup:
+
+Downloading carla should take ~30 minutes.
 ```
-poetry update
+wget https://carla-releases.s3.eu-west-3.amazonaws.com/Linux/CARLA_0.9.14.tar.gz
+
+tar -xvzf CARLA_0.9.14.tar.gz -C FullCarla
+```
+
+I'm putting this on the second disk because we don't have enough space.
+The path is
 
 ```
-I hate poetry, it takes well over 15000 seconds ~= 4 HOURS to create, initialize and resolve dependancy issues for environment and it doesn't even work 😭😭😭😭
+/media/e5_5044/OSDisk/carla/
+```
