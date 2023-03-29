@@ -1,5 +1,5 @@
 {
-    "python.linting.pylintEnabled": true,
+    "python.linting.pylintEnabled": false,
     "python.linting.enabled": true,
     "python.autoComplete.extraPaths": [
         "carla/PythonAPI/carla/",
@@ -13,5 +13,16 @@
     "python.analysis.autoImportCompletions": true,
     "python.linting.pylintArgs": [
         "--rcfile", ".pylintrc"
+    ],
+    "python.linting.banditEnabled": false,
+    "python.linting.mypyEnabled": true,
+    "python.analysis.extraPaths": [
+        "carla/PythonAPI/carla/",
+        "carla/PythonAPI/carla/agents",
+        "ros-bridge/carla_ad_agent/src/",
+        "Scenic/src/scenic/",
+        "VerifAI/src/verifai/",
+        "VerifAI/src/",
+        "yolov5/"
     ]
 }
