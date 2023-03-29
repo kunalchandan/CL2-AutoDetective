@@ -1,34 +1,34 @@
+"""
+Simulator Module
+"""
 # Environment imports
 import sys
 from pathlib import Path
 
+import time
+
 # Math imports
 import math
-import numpy as np
 
 # Carla
 from dotmap import DotMap
 
 ROOT = Path(Path(__file__).parent.resolve())
-sys.path.append(str(ROOT, 'VerifAI', 'src'))
-sys.path.append(str(ROOT, 'VerifAI', 'src', 'verifai', 'simulators', 'carla', 'agents'))
-sys.path.append(str(ROOT, 'carla', 'PythonAPI', 'carla'))
+sys.path.append(str(Path(ROOT, 'VerifAI', 'src')))
+sys.path.append(str(Path(ROOT, 'VerifAI', 'src', 'verifai', 'simulators', 'carla', 'agents')))
+sys.path.append(str(Path(ROOT, 'carla', 'PythonAPI', 'carla')))
 from verifai.simulators.carla.client_carla import ClientCarla
-from verifai.simulators.carla.carla_world import *
-from verifai.simulators.carla.carla_task import *
-from verifai.simulators.carla.carla_scenic_task import *
+from verifai.simulators.carla.carla_task import carla_task
 
-from verifai.simulators.carla.agents.brake_agent import *
-from verifai.simulators.carla.agents.pid_agent import *
-from verifai.simulators.carla.agents.overtake_agent import *
-
-import carla
+from verifai.simulators.carla.agents.brake_agent import BrakeAgent
+from verifai.simulators.carla.agents.pid_agent import PIDAgent
+from verifai.simulators.carla.agents.overtake_agent import OvertakeAgent
 
 from ego_agent import EgoAgent
 
 from carla import Transform, Rotation, Location # pylint: disable=no-name-in-module
 
-AGENTS = {'BrakeAgent': BrakeAgent, 'PIDAgent': PIDAgent, 'EgoAgent': EgoAgent}
+AGENTS = {'BrakeAgent': BrakeAgent, 'PIDAgent': PIDAgent, 'OvertakeAgent': OvertakeAgent, 'EgoAgent': EgoAgent}
 WORLD_MAP = 'Town04'
 
 # Falsifier (not CARLA) params
@@ -42,13 +42,13 @@ simulation_data.bufsize = BUFSIZE
 
 class CustomCarlaTask(carla_task):
     """Custom Carla Task"""
-    def __init__(self,
+    def __init__(self, # pylint: disable=too-many-arguments
                  n_sim_steps=250,
                  display_dim=(1280,720),
                  carla_host='127.0.0.1',
                  carla_port=2000,
                  carla_timeout=4.0,
-                 world_map='Town04'): # pylint: disable=too-many-arguments
+                 world_map='Town04'):
         super().__init__(
             n_sim_steps=n_sim_steps,
             display_dim=display_dim,
