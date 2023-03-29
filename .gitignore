@@ -1,9 +1,7 @@
-verifai/
+VerifAI/
 carla/
-agents/
 ros-bridge/
-carla_ad_agent/
 yolov5/
-scenic/
-ScenicGit/
+Scenic/
 __pycache__/
+venv/
