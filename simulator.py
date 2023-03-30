@@ -7,11 +7,14 @@ from pathlib import Path
 
 import time
 
+from typing import Dict, Type
+
 # Math imports
 import math
 
 # Carla
 from dotmap import DotMap
+from navigation.agent import Agent
 
 ROOT = Path(Path(__file__).parent.resolve())
 sys.path.append(str(Path(ROOT, 'VerifAI', 'src')))
@@ -19,6 +22,7 @@ sys.path.append(str(Path(ROOT, 'VerifAI', 'src', 'verifai', 'simulators', 'carla
 sys.path.append(str(Path(ROOT, 'carla', 'PythonAPI', 'carla')))
 from verifai.simulators.carla.client_carla import ClientCarla
 from verifai.simulators.carla.carla_task import carla_task
+from verifai.simulators.carla.carla_world import Vehicle
 
 from verifai.simulators.carla.agents.brake_agent import BrakeAgent
 from verifai.simulators.carla.agents.pid_agent import PIDAgent
@@ -28,7 +32,7 @@ from ego_agent import EgoAgent
 
 from carla import Transform, Rotation, Location # pylint: disable=no-name-in-module
 
-AGENTS = {'BrakeAgent': BrakeAgent, 'PIDAgent': PIDAgent, 'OvertakeAgent': OvertakeAgent, 'EgoAgent': EgoAgent}
+AGENTS : Dict[str, Type[Agent]] = {'BrakeAgent': BrakeAgent, 'PIDAgent': PIDAgent, 'OvertakeAgent': OvertakeAgent, 'EgoAgent': EgoAgent}
 WORLD_MAP = 'Town04'
 
 # Falsifier (not CARLA) params
@@ -58,7 +62,7 @@ class CustomCarlaTask(carla_task):
             world_map=world_map
         )
         self.objects = None
-        self.ego_vehicle = None
+        self.ego_vehicle : Vehicle = Vehicle(None, None)
 
     def snap_to_ground(self, location):
         '''Mutates @location to have the same z-coordinate as the nearest waypoint.'''
@@ -79,7 +83,7 @@ class CustomCarlaTask(carla_task):
                 attrs['color'] = color
             if 'blueprint' in obj._fields:
                 attrs['blueprint_filter'] = obj.blueprint
-            agent = PIDAgent
+            agent : Type[Agent] = PIDAgent
             if 'agent' in obj._fields:
                 agent = AGENTS[obj.agent]
             if obj.type in ['Vehicle', 'Car', 'Truck', 'Bicycle', 'Motorcycle']:
@@ -108,7 +112,7 @@ class CustomCarlaTask(carla_task):
 
     def trajectory_definition(self):
         # Get speed of collision as proportion of target speed.
-        collision = [(c[0], c[1]) for c in self.ego_vehicle.collision_sensor.get_collision_speeds()]
+        collision = [(c[0], c[1]) for c in self.ego_vehicle.collision_sensor.get_collision_speeds()] # type: ignore[union-attr]
 
         # MTL doesn't like empty lists.
         if not collision:

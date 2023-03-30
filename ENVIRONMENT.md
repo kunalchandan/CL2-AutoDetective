@@ -97,7 +97,7 @@ mv out/carla/ ./
 
 Run mypy with:
 ```
-mypy --config-file pyproject.toml --warn-unused-configs simulator.py
+mypy --config-file pyproject.toml simulator.py
 ```
 
 Or use pylint

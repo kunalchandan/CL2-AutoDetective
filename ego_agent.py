@@ -89,7 +89,7 @@ class EgoAgent(PIDAgent):
         #Adding RGB and Depth Camera on Ego
         self.image_sizex : int = 1280
         self.image_sizey : int = 1280
-        self.fov : int = 110
+        self.fov : float = 110.0
         self.sensor_tick : float = 0.2
         cam_bp = self._world.get_blueprint_library().find('sensor.camera.rgb')
         cam_bp.set_attribute("image_size_x", str(self.image_sizex))
@@ -121,8 +121,8 @@ class EgoAgent(PIDAgent):
             attachment_type=carla.AttachmentType.Rigid
             )
 
-        self.rgb_image = None
-        self.depth_image = None
+        self.rgb_image : np.ndarray = np.zeros((self.image_sizex, self.image_sizey))
+        self.depth_image : np.ndarray = np.zeros((self.image_sizex, self.image_sizey))
 
         # Model parameters
         self.imgsz=(640, 640)
@@ -144,11 +144,11 @@ class EgoAgent(PIDAgent):
             device=self.device1,
             data=data,
             fp16=half)
-        self.stride : int = self.od_model.stride
-        self.names : Dict[int, str] = self.od_model.names
-        self.pt : bool = self.od_model.pt
+        self.stride : int = self.od_model.stride # type: ignore[assignment]
+        self.names : Dict[int, str] = self.od_model.names # type: ignore[assignment]
+        self.classes : Dict[int, str] = self.od_model.names # type: ignore[assignment]
+        self.pt : bool = self.od_model.pt # type: ignore[assignment]
         self.imgsz = check_img_size(self.imgsz, s=self.stride)  # check image size
-        self.classes = self.od_model.names
         #print("Model loaded")
         self.rgb_camera.listen(self.process_rgb_sensor_data)
         self.depth_sensor.listen(self.process_depth_sensor_data)
