@@ -94,6 +94,12 @@ cd stubs
 stubgen -m carla
 mv out/carla/ ./
 ```
+
+Run mypy with:
+```
+mypy --config-file pyproject.toml --warn-unused-configs simulator.py
+```
+
 Or use pylint
 ```
 pylint --rcfile .pylintrc simulator.py
