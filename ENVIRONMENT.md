@@ -1,9 +1,9 @@
-# General documentation for me on how I set up the environment for this god-forsaken project
+# General documentation for me on how I set up the environment
 
 ## Why not poetry
 I hate poetry with a passion now.
 
-It takes well over 4 hours to tell me that a set of contraints just isn't possible. I want to kill myslef after that ordeal that has consumed well over 3 days of my life.
+It takes well over 4 hours to tell me that a set of contraints just isn't possible. It has consumed well over 3 days of my life.
 
 Installing pipx
 
@@ -48,15 +48,6 @@ pip install kmodes
 pip install statsmodels
 ```
 
-
-Reasoning:
-```
-scenic 2.0.0 requires attrs<20.0.0,>=19.3.0
-# Above is not true
-# observing the pyptoject.toml for scenic has
-# 	"attrs >= 19.3.0",
-metric-temporal-logic 0.4.1 requires attrs<23,>=22
-```
 I hate poetry, it takes well over 15000 seconds ~= 4 HOURS to create, initialize and resolve dependancy issues for environment and it doesn't even work 😭😭😭😭
 
 
