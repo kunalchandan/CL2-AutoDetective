@@ -51,8 +51,8 @@ pip install statsmodels
 I hate poetry, it takes well over 15000 seconds ~= 4 HOURS to create, initialize and resolve dependancy issues for environment and it doesn't even work 😭😭😭😭
 
 
-~~Dowloading the Carla zip is too big, I only have a few GB to play with on this computer.
-I will reuse the carla dowload in the `e5_5044` user's desktop.~~
+~~Dowloading the Carla zip is too big, I only have a few GB to play with on this computer.~~
+~~I will reuse the carla dowload in the `e5_5044` user's desktop.~~
 
 I have become greedy.
 Once the carla folder has been extracted to `/media/e5_5044/OSDisk/carla/` as indicated in the (`./README.md`)[./README.md] we must install the wheel for carla into the virtual environment that we have created.
@@ -69,7 +69,7 @@ cd /media/e5_5044/OSDisk/carla
 ./CarlaUE4.sh -RenderOffScreen
 ```
 
-## Optional
+## ~~Optional~~ Linting and Type Checking
 
 ```
 pip install pylint[spelling]
