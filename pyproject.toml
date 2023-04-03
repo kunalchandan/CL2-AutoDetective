@@ -37,3 +37,7 @@ ignore_errors = true
 [[tool.mypy.overrides]]
 module = "ros-bridge.*"
 ignore_errors = true
+
+[[tool.mypy.overrides]]
+module = "dotmap"
+ignore_missing_imports = true
