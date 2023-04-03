@@ -198,6 +198,17 @@ function-naming-style=snake_case
 good-names=i,
            j,
            k,
+           a,
+           b,
+           c,
+           w,
+           o,
+           x,
+           y,
+           x1,
+           x2,
+           y1,
+           y2,
            ex,
            Run,
            _
@@ -347,7 +358,7 @@ indent-after-paren=4
 indent-string='    '
 
 # Maximum number of characters on a single line.
-max-line-length=100
+max-line-length=140
 
 # Maximum number of lines in a module.
 max-module-lines=1000
@@ -566,7 +577,7 @@ contextmanager-decorators=contextlib.contextmanager
 # List of members which are set dynamically and missed by pylint inference
 # system, and so shouldn't trigger E1101 when accessed. Python regular
 # expressions are accepted.
-generated-members=
+generated-members=numpy.*,torch.*,carla.*
 
 # Tells whether to warn about missing members when the owner of the attribute
 # is inferred to be None.
