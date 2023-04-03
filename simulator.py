@@ -1,3 +1,8 @@
+import sys
+import pathlib
+
+sys.path.append(str(pathlib.Path.absolute(pathlib.Path('verifai', 'simulators', 'carla', 'agents'))))
+
 from verifai.simulators.carla.client_carla import *
 from verifai.simulators.carla.carla_world import *
 from verifai.simulators.carla.carla_task import *
@@ -9,14 +14,14 @@ from verifai.simulators.carla.agents.overtake_agent import *
 
 from ego_agent import EgoAgent
 
-AGENTS = {'BrakeAgent': BrakeAgent, 'PIDAgent': PIDAgent, 'EgoAgent': EgoAgent}
-
 import numpy as np
 from dotmap import DotMap
 
 import math
 import carla
 from carla import Transform, Rotation, Location
+
+AGENTS = {'BrakeAgent': BrakeAgent, 'PIDAgent': PIDAgent, 'EgoAgent': EgoAgent}
 
 # Falsifier (not CARLA) params
 PORT = 8888
