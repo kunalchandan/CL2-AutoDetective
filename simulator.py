@@ -5,6 +5,9 @@ Simulator Module
 import sys
 from pathlib import Path
 
+import logging
+from queue import Queue
+
 import time
 
 from typing import Dict, Type
@@ -14,12 +17,12 @@ import math
 
 # Carla
 from dotmap import DotMap
-from navigation.agent import Agent
-
 ROOT = Path(Path(__file__).parent.resolve())
 sys.path.append(str(Path(ROOT, 'VerifAI', 'src')))
 sys.path.append(str(Path(ROOT, 'VerifAI', 'src', 'verifai', 'simulators', 'carla', 'agents')))
 sys.path.append(str(Path(ROOT, 'carla', 'PythonAPI', 'carla')))
+sys.path.append(str(Path(ROOT, 'carla', 'PythonAPI', 'carla', 'agents')))
+from navigation.agent import Agent
 from verifai.simulators.carla.client_carla import ClientCarla
 from verifai.simulators.carla.carla_task import carla_task
 from verifai.simulators.carla.carla_world import Vehicle
@@ -29,10 +32,16 @@ from verifai.simulators.carla.agents.pid_agent import PIDAgent
 from verifai.simulators.carla.agents.overtake_agent import OvertakeAgent
 
 from ego_agent import EgoAgent
+import data_logging
 
-from carla import Transform, Rotation, Location # pylint: disable=no-name-in-module
+from carla import Transform, Rotation, Location
 
-AGENTS : Dict[str, Type[Agent]] = {'BrakeAgent': BrakeAgent, 'PIDAgent': PIDAgent, 'OvertakeAgent': OvertakeAgent, 'EgoAgent': EgoAgent}
+AGENTS: Dict[str, Type[Agent]] = {
+    'BrakeAgent':       BrakeAgent,
+    'PIDAgent':         PIDAgent,
+    'OvertakeAgent':    OvertakeAgent,
+    'EgoAgent':         EgoAgent
+    }
 WORLD_MAP = 'Town04'
 
 # Falsifier (not CARLA) params
@@ -62,7 +71,7 @@ class CustomCarlaTask(carla_task):
             world_map=world_map
         )
         self.objects = None
-        self.ego_vehicle : Vehicle = Vehicle(None, None)
+        self.ego_vehicle : Vehicle = None # type: ignore[assignment]
 
     def snap_to_ground(self, location):
         '''Mutates @location to have the same z-coordinate as the nearest waypoint.'''
@@ -107,7 +116,8 @@ class CustomCarlaTask(carla_task):
             elif obj.type in ['Prop', 'Trash', 'Cone']:
                 self.world.add_prop(spawn=spawn, **attrs)
             else:
-                print('Unsupported object type:', obj.type)
+                logger = logging.getLogger('SimulatorLogger')
+                logger.debug('Unsupported object type:', obj.type)
 
 
     def trajectory_definition(self):
@@ -117,31 +127,37 @@ class CustomCarlaTask(carla_task):
         # MTL doesn't like empty lists.
         if not collision:
             collision = [(0,0)]
-        # print(collision)
+        # logger.debug(collision)
         traj = {
             'collision': collision,
             }
         return traj
 
+    def run_task(self, sample):
+        try:
+            super().run_task(sample)
+        except AttributeError:
+            logger = logging.getLogger('SimulatorLogger')
+            logger.warn('World Failure')
 
-def main():
+
+
+def main(log_queue: Queue):
     """Main simulator function"""
     # Note: The world_map param below should correspond to the MapPath
     # specified in the scenic file. E.g., if world_map is 'Town01',
     # the MapPath in the scenic file should be the path to Town01.xodr.
+    logger = data_logging.set_queue_logger('SimulatorLogger', log_queue)
+
     simulation_data.task = CustomCarlaTask(world_map=WORLD_MAP)
 
-    print(f"Simulation Task Defined as : {WORLD_MAP}")
+    logger.debug(f"Simulation Task Defined as : {WORLD_MAP}")
     client_task = ClientCarla(simulation_data)
     while True:
         try:
             while client_task.run_client():
                 pass
         except RuntimeError:
-            print("Falsifier server does not seem to be running. Trying again in 2 seconds")
+            logger.debug("Falsifier server does not seem to be running. Trying again in 2 seconds")
             time.sleep(2.0)
-    print('End of all simulations.')
-
-
-if __name__ == "__main__":
-    main()
+    logger.debug('End of all simulations.')
