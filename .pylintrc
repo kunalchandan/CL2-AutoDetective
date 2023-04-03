@@ -77,7 +77,7 @@ ignored-modules=
 # I hate this thing's god damn syntax it's so sensitive and it's not documented.
 # There cannot be spaces between the end of a statement and a semicolon
 # You cannot have newlines because you should hate yourself
-init-hook="import sys; from pathlib import Path; from pylint.config import find_default_config_files; ROOT = Path(list(find_default_config_files())[0]).parent.resolve(); [sys.path.append( str(a) ) for a in [Path(ROOT, 'carla', 'PythonAPI', 'carla', 'agents'), Path(ROOT, 'VerifAI', 'src', 'verifai', 'simulators', 'carla', 'agents'), Path(ROOT, 'carla', 'PythonAPI', 'carla'), Path(ROOT, 'VerifAI', 'src'), Path(ROOT, 'yolov5')] ]"
+init-hook="import sys; from pathlib import Path; from pylint.config import find_default_config_files; ROOT = Path(list(find_default_config_files())[0]).parent.resolve(); [sys.path.append( str(a) ) for a in [Path(ROOT, 'stubs', 'carla'), Path(ROOT, 'stubs'), Path(ROOT, 'carla', 'PythonAPI', 'carla', 'agents'), Path(ROOT, 'carla', 'PythonAPI', 'carla'), Path(ROOT, 'VerifAI', 'src', 'verifai', 'simulators', 'carla', 'agents'), Path(ROOT, 'VerifAI', 'src'), Path(ROOT, 'yolov5')] ]"
 
 # Use multiple processes to speed up Pylint. Specifying 0 will auto-detect the
 # number of processors available to use, and will cap the count on Windows to

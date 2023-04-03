@@ -2,11 +2,11 @@
     "python.linting.pylintEnabled": false,
     "python.linting.enabled": true,
     "python.autoComplete.extraPaths": [
-        "stubs/carla/",
+        "stubs/",
         "carla/PythonAPI/carla/",
         "carla/PythonAPI/carla/agents",
         "ros-bridge/carla_ad_agent/src/",
-        "Scenic/src/scenic/",
+        "Scenic/src/",
         "VerifAI/src/verifai/",
         "VerifAI/src/",
         "yolov5/",
@@ -17,12 +17,15 @@
     ],
     "python.linting.banditEnabled": false,
     "python.linting.mypyEnabled": true,
+    "python.linting.mypyArgs": [
+        "--config-file=pyproject.toml",
+    ],
     "python.analysis.extraPaths": [
-        "stubs/carla/",
+        "stubs/",
         "carla/PythonAPI/carla/",
         "carla/PythonAPI/carla/agents",
         "ros-bridge/carla_ad_agent/src/",
-        "Scenic/src/scenic/",
+        "Scenic/src/",
         "VerifAI/src/verifai/",
         "VerifAI/src/",
         "yolov5/"
