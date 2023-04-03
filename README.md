@@ -23,7 +23,7 @@ cd autoDetective/
 
 git clone https://github.com/BerkeleyLearnVerify/VerifAI.git
 
-git clone https://github.com/carla-simulator/carla.git CarlaGit
+git clone https://github.com/carla-simulator/carla.git
 
 git clone https://github.com/carla-simulator/ros-bridge.git
 

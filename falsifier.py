@@ -1,9 +1,12 @@
+import csv
+import sys
+import pathlib
+
+sys.path.append(str(pathlib.Path.absolute(pathlib.Path(pathlib.Path(__file__).parent.resolve(), 'VerifAI', 'src'))))
+
 from verifai.samplers.scenic_sampler import ScenicSampler
 from dotmap import DotMap
 from verifai.falsifier import mtl_falsifier
-
-import csv
-import pathlib
 
 LOCAL_PATH = pathlib.Path(__file__).parent.resolve()
 path_to_scenic_file = pathlib.Path.joinpath(LOCAL_PATH, 'scenarios', 'oas_scenario_06.scenic')
