@@ -1,7 +1,7 @@
 import sys
 import pathlib
 
-sys.path.append(str(pathlib.Path.absolute(pathlib.Path('verifai', 'simulators', 'carla', 'agents'))))
+sys.path.append(str(pathlib.Path.absolute(pathlib.Path(pathlib.Path(__file__).parent.resolve(), 'verifai', 'simulators', 'carla', 'agents'))))
 
 from verifai.simulators.carla.client_carla import *
 from verifai.simulators.carla.carla_world import *
