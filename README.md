@@ -38,4 +38,8 @@ cp -r carla/agents/ ./
 mv ros-bridge/carla_ad_agent/src/carla_ad_agent/ ./
 ```
 
+Build environment.
+```
+poetry update
 
+```
