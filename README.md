@@ -15,15 +15,21 @@ Are there some metrics we can use as a proxy to lay blame on the portion of the 
 ## Setup
 
 ```
-git clone https://github.com/kunalchandan/CL2-AutoDetective.git
+cd ~
+
+git clone https://github.com/kunalchandan/CL2-AutoDetective.git autoDetective
+
+cd autoDetective/
 
 git clone https://github.com/BerkeleyLearnVerify/VerifAI.git
 
-git clone https://github.com/carla-simulator/carla.git
+git clone https://github.com/carla-simulator/carla.git CarlaGit
 
 git clone https://github.com/carla-simulator/ros-bridge.git
 
 git clone https://github.com/ultralytics/yolov5.git
+
+git clone https://github.com/BerkeleyLearnVerify/Scenic.git ScenicGit
 ```
 Move the borrowed repositories out to let intellisense help me out.
 
@@ -31,9 +37,9 @@ Move the borrowed repositories out to let intellisense help me out.
 # This might fail, just do this manually
 mv VerifAI/ VerifAI-git
 mv VerifAI-git/src/verifai/ ./
-mv carla/ carla-git
-mv carla-git/PythonAPI/carla/ ./
+mv CarlaGit/PythonAPI/carla/ ./
 cp -r carla/agents/ ./
+cp -r ScenicGit/src/scenic/ ./
 # Had to alter some imports for these
 mv ros-bridge/carla_ad_agent/src/carla_ad_agent/ ./
 ```
