@@ -1,6 +1,6 @@
 # Drive Imports
 import carla
-from carla.agents.navigation.controller import VehiclePIDController
+from agents.navigation.controller import VehiclePIDController
 
 # From ROS-Bridge
 from carla_ad_agent.agent import *
@@ -47,11 +47,11 @@ class LaneChange(IntEnum):
 
 
 '''This is a Test Agent'''
-class TestAgent(PIDAgent):
+class EgoAgent(PIDAgent):
     def __init__(self, vehicle, opt_dict=None):
         super().__init__(vehicle, opt_dict)
-        # Distance to maintain from other vehicles.
         self.row_values = [] #list for maintaining data related to actions taken by ego
+        # Distance to maintain from other vehicles.
         self.clear_dist = 10.0
         self.current_image = None
         self.location_pid_dict = {
