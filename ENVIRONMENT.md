@@ -60,7 +60,7 @@ metric-temporal-logic 0.4.1 requires attrs<23,>=22
 ```
 
 
-Dowloading the Carla zip is too big, I only have a few GB to play with on this computer. 
+Dowloading the Carla zip is too big, I only have a few GB to play with on this computer.
 I will reuse the carla dowload in the `e5_5044` user's desktop.
 
 ## Optional
@@ -68,8 +68,14 @@ I will reuse the carla dowload in the `e5_5044` user's desktop.
 ```
 pip install pylint[spelling]
 pip install bandit
+pip install mypy
 ```
 
+Install stubs for mypy
+```
+pip install types-PyYAML types-requests types-setuptools types-tabulate
+```
+Or use pylint
 ```
 pylint --rcfile .pylintrc simulator.py
 ```
