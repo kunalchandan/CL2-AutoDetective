@@ -58,10 +58,18 @@ scenic 2.0.0 requires attrs<20.0.0,>=19.3.0
 # 	"attrs >= 19.3.0",
 metric-temporal-logic 0.4.1 requires attrs<23,>=22
 ```
+I hate poetry, it takes well over 15000 seconds ~= 4 HOURS to create, initialize and resolve dependancy issues for environment and it doesn't even work 😭😭😭😭
 
 
-Dowloading the Carla zip is too big, I only have a few GB to play with on this computer.
-I will reuse the carla dowload in the `e5_5044` user's desktop.
+~~Dowloading the Carla zip is too big, I only have a few GB to play with on this computer.
+I will reuse the carla dowload in the `e5_5044` user's desktop.~~
+
+I have become greedy.
+Once the carla folder has been extracted to `/media/e5_5044/OSDisk/carla/` as indicated in the (`./README.md`)[./README.md] we must install the wheel for carla into the virtual environment that we have created.
+
+```
+pip install /media/e5_5044/OSDisk/carla/PythonAPI/carla/dist/carla-0.9.14-cp37-cp37m-manylinux_2_27_x86_64.whl
+```
 
 ## Optional
 
