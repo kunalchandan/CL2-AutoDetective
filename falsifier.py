@@ -6,7 +6,7 @@ import csv
 import pathlib
 
 LOCAL_PATH = pathlib.Path(__file__).parent.resolve()
-path_to_scenic_file = pathlib.Path.joinpath(LOCAL_PATH, 'oas_scenario_06.scenic')
+path_to_scenic_file = pathlib.Path.joinpath(LOCAL_PATH, 'scenarios', 'oas_scenario_06.scenic')
 sampler = ScenicSampler.fromScenario(path_to_scenic_file)
 
 MAX_ITERS = 10
@@ -21,8 +21,8 @@ falsifier_params = DotMap(
     max_time=MAX_TIME,
     save_error_table=True,
     save_safe_table=True,
-    error_table_path=pathlib.Path.joinpath(LOCAL_PATH, 'error_table.csv'),
-    safe_table_path=pathlib.Path.joinpath(LOCAL_PATH, 'safe_table.csv')
+    error_table_path=pathlib.Path.joinpath(LOCAL_PATH, 'falsifier_outputs', 'error_table.csv'),
+    safe_table_path=pathlib.Path.joinpath(LOCAL_PATH, 'falsifier_outputs', 'safe_table.csv')
 )
 
 server_options = DotMap(port=PORT, bufsize=BUFSIZE, maxreqs=MAXREQS)
