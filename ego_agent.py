@@ -42,6 +42,9 @@ from yolov5.utils.torch_utils import select_device
 from yolov5.utils.augmentations import letterbox
 
 
+LOCAL_PATH = pathlib.Path.absolute(pathlib.Path(__file__).parent.resolve())
+
+
 class LaneChange(IntEnum):
     LEFT = 1
     RIGHT = -1
@@ -114,8 +117,8 @@ class EgoAgent(PIDAgent):
 
         #Model parameters
         self.imgsz=(640, 640)
-        self.weights = '/home/kunalchandan/autoDetective/OD_model_data/yolo_weights.pt'
-        data = '/home/kunalchandan/autoDetective/OD_model_data/carla_data.yaml'
+        self.weights = pathlib.Path(LOCAL_PATH, 'OD_model_data', 'yolo_weights.pt')
+        data = pathlib.Path(LOCAL_PATH, 'OD_model_data', 'carla_data.yaml')
         self.conf_thres=0.25  # confidence threshold
         self.iou_thres=0.45 # NMS IOU threshold
         self.max_det=1000  # maximum detections per image
@@ -240,8 +243,10 @@ class EgoAgent(PIDAgent):
                 self.calc_dist = dist
                 if dist == 0:
                     # TODO replace with pathlib
-                    self.temp_image.save_to_disk('/home/kunalchandan/autoDetective/zero_dist/rgb/%d.jpg' % self.temp_image.frame)
-                    self.temp_depth_image.save_to_disk('/home/kunalchandan/autoDetective/zero_dist/depth/%d.jpg' % self.temp_depth_image.frame)
+                    rgb_path = pathlib.Path(LOCAL_PATH, 'zero_dist', 'rgb', '%d.jpg' % self.temp_image.frame) 
+                    depth_path = pathlib.Path(LOCAL_PATH, 'zero_dist', 'depth', '%d.jpg' % self.temp_depth_image.frame) 
+                    self.temp_image.save_to_disk(rgb_path)
+                    self.temp_depth_image.save_to_disk(depth_path)
                     print("CALCULATED DISTANCE WAS ZERO!")
                     print("Location = {}, {}".format(centre_x, centre_y))
                     print("RGB frame number: {} and Depth image number: {}".format(self.temp_image.frame, self.temp_depth_image.frame))
