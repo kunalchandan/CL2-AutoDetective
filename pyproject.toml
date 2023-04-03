@@ -7,6 +7,7 @@ mypy_path = [
     "$MYPY_CONFIG_FILE_DIR",
     "$MYPY_CONFIG_FILE_DIR/carla/PythonAPI/carla/agents/",
     "$MYPY_CONFIG_FILE_DIR/VerifAI/src/",
+    "$MYPY_CONFIG_FILE_DIR/Scenic/src/",
     "$MYPY_CONFIG_FILE_DIR/venv/",
 ]
 follow_imports_for_stubs = true
@@ -39,7 +40,7 @@ module = "verifai.*"
 ignore_errors = true
 
 [[tool.mypy.overrides]]
-module = "Scenic.*"
+module = "scenic.*"
 ignore_errors = true
 
 [[tool.mypy.overrides]]

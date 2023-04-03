@@ -5,6 +5,7 @@ I hate poetry with a passion now.
 
 It takes well over 4 hours to tell me that a set of contraints just isn't possible. It has consumed well over 3 days of my life.
 
+## Using Pip, VirtualEnv
 Installing pipx
 
 ```
@@ -30,11 +31,25 @@ Activate env with:
 source venv/bin/activate
 ```
 
+## Using Packages
 
 Install packages
 ```
 pip install numpy dill dotmap networkx
-pip install scenic # installs a whole bunch of packages
+
+# Scenic Dependancies
+pip install antlr4-python3-runtime
+pip install attrs
+pip install importlib_metadata
+pip install mapbox_earcut
+pip install matplotlib
+pip install opencv
+pip install pillow
+pip install pygame
+pip install scipy
+pip install shapely
+
+pip install frozendict
 pip install pandas pyyaml
 pip install torch==1.13.1+cu116 torchvision==0.14.1+cu116 torchaudio==0.13.1 --extra-index-url https://download.pytorch.org/whl/cu116
 pip install psutil
@@ -75,6 +90,7 @@ cd /media/e5_5044/OSDisk/carla
 pip install pylint[spelling]
 pip install bandit
 pip install mypy
+pip install ipython
 ```
 
 Install stubs for mypy
