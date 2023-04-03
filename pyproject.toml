@@ -1,0 +1,39 @@
+[project]
+name = "AutoDetective"
+
+[tool.mypy]
+mypy_path = [
+    "$MYPY_CONFIG_FILE_DIR/stubs/",
+    "$MYPY_CONFIG_FILE_DIR",
+    "$MYPY_CONFIG_FILE_DIR/VerifAI/src/",
+    "$MYPY_CONFIG_FILE_DIR/venv/",
+]
+follow_imports_for_stubs = true
+exclude = [
+    "carla/",
+    "stubs/",
+    "yolov5/",
+    "Scenic/",
+    "ros-bridge/",
+    "VerifAI/",
+]
+
+[[tool.mypy.overrides]]
+module = "carla.*"
+ignore_errors = true
+
+[[tool.mypy.overrides]]
+module = "yolov5.*"
+ignore_errors = true
+
+[[tool.mypy.overrides]]
+module = "verifai.*"
+ignore_errors = true
+
+[[tool.mypy.overrides]]
+module = "Scenic.*"
+ignore_errors = true
+
+[[tool.mypy.overrides]]
+module = "ros-bridge.*"
+ignore_errors = true
