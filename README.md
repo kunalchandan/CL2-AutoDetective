@@ -43,3 +43,4 @@ Build environment.
 poetry update
 
 ```
+I hate poetry, it takes well over 15000 seconds ~= 4 HOURS to create, initialize and resolve dependancy issues for environment and it doesn't even work 😭😭😭😭
