@@ -29,7 +29,7 @@ git clone https://github.com/carla-simulator/ros-bridge.git
 
 git clone https://github.com/ultralytics/yolov5.git
 
-git clone https://github.com/BerkeleyLearnVerify/Scenic.git ScenicGit
+git clone https://github.com/BerkeleyLearnVerify/Scenic.git
 ```
 Move the borrowed repositories out to let intellisense help me out.
 
@@ -39,7 +39,7 @@ mv VerifAI/ VerifAI-git
 mv VerifAI-git/src/verifai/ ./
 mv CarlaGit/PythonAPI/carla/ ./
 cp -r carla/agents/ ./
-cp -r ScenicGit/src/scenic/ ./
+cp -r Scenic/src/scenic/ ./
 # Had to alter some imports for these
 mv ros-bridge/carla_ad_agent/src/carla_ad_agent/ ./
 ```

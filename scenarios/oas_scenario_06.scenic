@@ -4,8 +4,8 @@ The car ahead of ego that is badly parked over the sidewalk cuts into ego vehicl
 This scenario may fail if there exists any obstacle (e.g. fences) on the sidewalk 
 """
 
-
-param map = localPath('/home/e5_5044/Desktop/Scenic/tests/formats/opendrive/maps/CARLA/Town04.xodr')  # or other CARLA map that definitely works
+# TODO Replace with relative path or something else
+param map = localPath('/home/kunalchandan/autoDetective/Scenic/tests/formats/opendrive/maps/CARLA/Town04.xodr')  # or other CARLA map that definitely works
 param carla_map = 'Town04'
 model scenic.domains.driving.model
 
