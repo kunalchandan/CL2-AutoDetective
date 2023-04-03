@@ -4,4 +4,6 @@ agents/
 ros-bridge/
 carla_ad_agent/
 yolov5/
+scenic/
+ScenicGit/
 __pycache__/
