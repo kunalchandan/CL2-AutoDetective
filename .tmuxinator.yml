@@ -6,13 +6,15 @@ windows:
       layout: tiled
       panes:
         - carla:
-          - cd Desktop/carla
+          - cd /home/e5_5044/Desktop/carla/
           - ./CarlaUE4.sh -opengl
         - GPU:
           - watch nvidia-smi
         - falsifier:
-          - cd ~/Desktop/k_explorer
-          - poetry run /usr/bin/python3 falsifier.py
+          - cd ~/autoDetective
+          - source venv/bin/activate
+          - python falsifier.py
         - simulator:
-          - cd ~/Desktop/k_explorer
-          - poetry run /usr/bin/python3 simulator.py
+          - cd ~/autoDetective
+          - source venv/bin/activate
+          - python simulator.py
