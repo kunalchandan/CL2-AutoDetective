@@ -114,8 +114,8 @@ class EgoAgent(PIDAgent):
 
         #Model parameters
         self.imgsz=(640, 640)
-        self.weights = '/home/e5_5044/Desktop/yolov5/runs/train/yolo5_carla_attempt1/weights/best.pt'
-        data = '/home/e5_5044/Desktop/yolov5/data/carla_data.yaml'
+        self.weights = '/home/kunalchandan/autoDetective/OD_model_data/yolo_weights.pt'
+        data = '/home/kunalchandan/autoDetective/OD_model_data/carla_data.yaml'
         self.conf_thres=0.25  # confidence threshold
         self.iou_thres=0.45 # NMS IOU threshold
         self.max_det=1000  # maximum detections per image
@@ -239,8 +239,9 @@ class EgoAgent(PIDAgent):
                 dist = self.compute_distance_from_depth_image(centre_x, centre_y)
                 self.calc_dist = dist
                 if dist == 0:
-                    self.temp_image.save_to_disk('/home/e5_5044/Desktop/699-Rishi/rgb_images_dist0/%d.jpg' % self.temp_image.frame)
-                    self.temp_depth_image.save_to_disk('/home/e5_5044/Desktop/699-Rishi/depth_images_dist0/%d.jpg' % self.temp_depth_image.frame)
+                    # TODO replace with pathlib
+                    self.temp_image.save_to_disk('/home/kunalchandan/autoDetective/zero_dist/rgb/%d.jpg' % self.temp_image.frame)
+                    self.temp_depth_image.save_to_disk('/home/kunalchandan/autoDetective/zero_dist/depth/%d.jpg' % self.temp_depth_image.frame)
                     print("CALCULATED DISTANCE WAS ZERO!")
                     print("Location = {}, {}".format(centre_x, centre_y))
                     print("RGB frame number: {} and Depth image number: {}".format(self.temp_image.frame, self.temp_depth_image.frame))
@@ -260,7 +261,6 @@ class EgoAgent(PIDAgent):
                     
                     ########################################
 
-                    # self.temp_depth_image.save_to_disk('/home/e5_5044/Desktop/699-Rishi/1temp/%d.jpg' % self.temp_depth_image.frame)
                     image_id = str(int(self.temp_image.frame))
                 else:
                     image_id = str(" ")
@@ -283,16 +283,12 @@ class EgoAgent(PIDAgent):
                     # print("CARLA computed distance: "+str(v_loc.distance(location)))
                     carla_dist = v_loc.distance(location)
                     if abs(dist - carla_dist+4.5) > 2:
-                        # self.temp_image.save_to_disk('/home/e5_5044/Desktop/699-Rishi/rgb_images_dist2-5/%d.jpg' % self.temp_image.frame)
-                        # self.temp_depth_image.save_to_disk('/home/e5_5044/Desktop/699-Rishi/depth_images_dist2-5/%d.jpg' % self.temp_depth_image.frame)
                         image_id = str(int(self.temp_image.frame))
                         r_channel = self.depth_image[centre_x][centre_y][2]
                         g_channel = self.depth_image[centre_x][centre_y][1]
                         b_channel = self.depth_image[centre_x][centre_y][0]
                     else:
                         r_channel, g_channel, b_channel = "", "", ""
-                    #     self.temp_image.save_to_disk('/home/e5_5044/Desktop/699-Rishi/rgb_images_norm/%d.jpg' % self.temp_image.frame)
-                    #     self.temp_depth_image.save_to_disk('/home/e5_5044/Desktop/699-Rishi/depth_images_norm/%d.jpg' % self.temp_depth_image.frame)
                     if abs(dist - carla_dist) <= 25:
                         false_decision_trigger = 0
                         if carla_dist < min_dist and dist >= min_dist:
@@ -363,7 +359,6 @@ class EgoAgent(PIDAgent):
         img = img[:,:,:3]
         self.rgb_image = img
         self.temp_image = image
-        # image.save_to_disk('/home/e5_5044/Desktop/temp/%d.jpg' % image.frame)
 
     def process_depth_sensor_data(self, image):
         self.fov = image.fov
@@ -372,7 +367,6 @@ class EgoAgent(PIDAgent):
         img = img[:,:,:3]
         self.depth_image = img
         self.temp_depth_image = image
-        # self.temp_depth_image.save_to_disk('/home/e5_5044/Desktop/699-Rishi/2temp/%d.jpg' % self.temp_depth_image.frame)
 
     def get_detection(self, image, classes=None):
         
