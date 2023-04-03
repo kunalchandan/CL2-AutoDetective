@@ -8,8 +8,8 @@ It takes well over 4 hours to tell me that a set of contraints just isn't possib
 Installing pipx
 
 ```
-python3 -m pip install --user pipx
-python3 -m pipx ensurepath
+python3.7 -m pip install --user pipx
+python3.7 -m pipx ensurepath
 ```
 
 
@@ -21,7 +21,7 @@ pipx install virtualenv
 
 Setup the virtual environment
 ```
-virtualenv venv
+virtualenv venv --python python3.7
 ```
 
 
@@ -35,7 +35,6 @@ Install packages
 ```
 pip install numpy dill dotmap networkx
 pip install scenic # installs a whole bunch of packages
-pip install carla
 pip install pandas pyyaml
 pip install torch==1.13.1+cu116 torchvision==0.14.1+cu116 torchaudio==0.13.1 --extra-index-url https://download.pytorch.org/whl/cu116
 pip install psutil
@@ -71,6 +70,14 @@ Once the carla folder has been extracted to `/media/e5_5044/OSDisk/carla/` as in
 pip install /media/e5_5044/OSDisk/carla/PythonAPI/carla/dist/carla-0.9.14-cp37-cp37m-manylinux_2_27_x86_64.whl
 ```
 
+Now to run the Carla UE Engine
+
+```
+cd /media/e5_5044/OSDisk/carla
+
+./CarlaUE4.sh -RenderOffScreen
+```
+
 ## Optional
 
 ```
@@ -81,7 +88,11 @@ pip install mypy
 
 Install stubs for mypy
 ```
-pip install types-PyYAML types-requests types-setuptools types-tabulate
+mypy --install-types
+mkdir stubs
+cd stubs
+stubgen -m carla
+mv out/carla/ ./
 ```
 Or use pylint
 ```
