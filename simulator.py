@@ -1,7 +1,7 @@
-import sys
-sys.path.append('/home/e5_5044/Desktop/carla/PythonAPI/carla/dist/carla-0.9.11-py3.7-linux-x86_64.egg')
-sys.path.append('/home/e5_5044/Desktop/VerifAI/src/verifai/simulators/carla/agents/')
-sys.path.append('/home/e5_5044/Desktop/carla/PythonAPI/carla/')
+# import sys
+# sys.path.append('/home/e5_5044/Desktop/carla/PythonAPI/carla/dist/carla-0.9.11-py3.7-linux-x86_64.egg')
+# sys.path.append('/home/e5_5044/Desktop/VerifAI/src/verifai/simulators/carla/agents/')
+# sys.path.append('/home/e5_5044/Desktop/carla/PythonAPI/carla/')
 from verifai.simulators.carla.client_carla import *
 from verifai.simulators.carla.carla_world import *
 from verifai.simulators.carla.carla_task import *
@@ -9,12 +9,11 @@ from verifai.simulators.carla.carla_scenic_task import *
 
 from verifai.simulators.carla.agents.brake_agent import *
 from verifai.simulators.carla.agents.pid_agent import *
-from verifai.simulators.carla.agents.test_agent import *
-from verifai.simulators.carla.agents.test_agent_gt import *
-# from verifai.simulators.carla.agents.overtake_agent import *
+from verifai.simulators.carla.agents.overtake_agent import *
 
+from ego_agent import EgoAgent
 
-AGENTS = {'BrakeAgent': BrakeAgent, 'PIDAgent': PIDAgent, 'TestAgent': TestAgent}
+AGENTS = {'BrakeAgent': BrakeAgent, 'PIDAgent': PIDAgent, 'EgoAgent': EgoAgent}
 
 import numpy as np
 from dotmap import DotMap
@@ -31,7 +30,7 @@ simulation_data = DotMap()
 simulation_data.port = PORT
 simulation_data.bufsize = BUFSIZE
 
-class my_task(carla_task):
+class CustomCarlaTask(carla_task):
     def __init__(self,
                  n_sim_steps=250,
                  display_dim=(1280,720),
@@ -73,7 +72,7 @@ class my_task(carla_task):
                 agent = AGENTS[obj.agent]
             if obj.type in ['Vehicle', 'Car', 'Truck', 'Bicycle', 'Motorcycle']:
                 if obj is sample.objects[0]:
-                    self.ego_vehicle = self.world.add_vehicle(AGENTS['TestAgent'],
+                    self.ego_vehicle = self.world.add_vehicle(AGENTS['EgoAgent'],
                                        spawn=spawn,
                                        has_collision_sensor=True,
                                        has_lane_sensor=False,
@@ -114,12 +113,10 @@ class my_task(carla_task):
 # specified in the scenic file. E.g., if world_map is 'Town01',
 # the MapPath in the scenic file should be the path to Town01.xodr.
 WORLD_MAP = 'Town04'
-simulation_data.task = my_task(world_map=WORLD_MAP)
+simulation_data.task = CustomCarlaTask(world_map=WORLD_MAP)
 
 print(f"Simulation Task Defined as : {WORLD_MAP}")
 client_task = ClientCarla(simulation_data)
 while client_task.run_client():
-
-    print("JOE MAMA")
     pass
 print('End of all simulations.')
