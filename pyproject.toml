@@ -5,6 +5,7 @@ name = "AutoDetective"
 mypy_path = [
     "$MYPY_CONFIG_FILE_DIR/stubs/",
     "$MYPY_CONFIG_FILE_DIR",
+    "$MYPY_CONFIG_FILE_DIR/carla/PythonAPI/carla/agents/",
     "$MYPY_CONFIG_FILE_DIR/VerifAI/src/",
     "$MYPY_CONFIG_FILE_DIR/venv/",
 ]
@@ -17,9 +18,16 @@ exclude = [
     "ros-bridge/",
     "VerifAI/",
 ]
+check_untyped_defs = true
+warn_unused_configs = true
+
 
 [[tool.mypy.overrides]]
 module = "carla.*"
+ignore_errors = true
+
+[[tool.mypy.overrides]]
+module = "navigation.*"
 ignore_errors = true
 
 [[tool.mypy.overrides]]
