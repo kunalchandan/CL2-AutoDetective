@@ -29,5 +29,13 @@
         "VerifAI/src/verifai/",
         "VerifAI/src/",
         "yolov5/"
-    ]
+    ],
+    "files.watcherExclude": {
+        "**/.git/objects/**": true,
+        "**/__pycache__/**": true,
+        "**/carla/**": true,
+        "**/Scenic/**": true,
+        "**/VerifAI/**": true,
+        "**/yolov5/**": true,
+    }
 }
