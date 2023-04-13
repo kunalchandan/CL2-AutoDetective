@@ -6,3 +6,4 @@ Scenic/
 __pycache__/
 venv/
 tmp/
+.mypy_cache/

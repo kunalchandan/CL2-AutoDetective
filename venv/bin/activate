@@ -1,7 +1,9 @@
 # This file must be used with "source bin/activate" *from bash*
 # you cannot run it directly
 export OLD_PYTHONPATH="$PYTHONPATH"
+export OLD_MYPATH="$MYPATH"
 export PYTHONPATH=""
+export MYPATH="/home/e5_5044/Desktop/k_explorer/stubs/"
 
 if [ "${BASH_SOURCE-}" = "$0" ]; then
     echo "You must source this script: \$ source $0" >&2
@@ -42,7 +44,9 @@ deactivate () {
     # Self destruct!
         echo "Resetting to previous pythonpath"
         export PYTHONPATH="$OLD_PYTHONPATH"
+        export MYPATH="$OLD_MYPATH"
         export OLD_PYTHONPATH=""
+        export OLD_MYPATH=""
         unset -f deactivate
     fi
 }
